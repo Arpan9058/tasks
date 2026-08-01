@@ -1,0 +1,55 @@
+{
+  "schema_version": "compact-swebench-harborized-v1",
+  "execution": {
+    "commands": [
+      "python -m pytest -v tests/evals/test_evaluator_context.py::test_evaluator_context_basic",
+      "python -m pytest -v tests/evals/test_agentic_evaluators.py::test_tool_spans_v2_and_v3_both_detected_in_start_order tests/evals/test_agentic_evaluators.py::test_tool_spans_ignore_output_function_spans tests/evals/test_agentic_evaluators.py::test_tool_spans_ignore_deferred_tool_calls tests/evals/test_agentic_evaluators.py::test_failed_attempts_excluded_by_default tests/evals/test_agentic_evaluators.py::test_failed_attempts_included_when_requested tests/evals/test_agentic_evaluators.py::test_tool_correctness_multiset_requires_duplicates tests/evals/test_agentic_evaluators.py::test_tool_correctness_both_missing_and_extra_reported tests/evals/test_agentic_evaluators.py::test_trajectory_match_exact_fail tests/evals/test_agentic_evaluators.py::test_trajectory_match_in_order_partial tests/evals/test_agentic_evaluators.py::test_trajectory_match_any_order_partial_overlap tests/evals/test_agentic_evaluators.py::test_trajectory_match_no_span_tree_returns_float_zero tests/evals/test_agentic_evaluators.py::test_argument_correctness_subset_pass tests/evals/test_agentic_evaluators.py::test_argument_correctness_exact_pass tests/evals/test_agentic_evaluators.py::test_argument_correctness_exact_fail_on_extra_keys 'tests/evals/test_agentic_evaluators.py::test_argument_correctness_include_content_false[_v3_tool_span]' tests/evals/test_agentic_evaluators.py::test_max_tool_calls_counts_failed_attempts_by_default tests/evals/test_agentic_evaluators.py::test_max_model_requests_metrics_over_budget tests/evals/test_agentic_evaluators.py::test_max_model_requests_falls_back_to_span_count tests/evals/test_agentic_evaluators.py::test_public_exports_and_loader_order tests/evals/test_agentic_evaluators.py::test_span_query_has_status"
+    ],
+    "selected_test_files_to_run": [
+      "tests/evals/test_agentic_evaluators.py",
+      "tests/evals/test_evaluator_context.py"
+    ],
+    "env": {},
+    "timeout_sec": 1800
+  },
+  "grading": {
+    "fail_to_pass": [
+      "tests/evals/test_agentic_evaluators.py::test_tool_spans_v2_and_v3_both_detected_in_start_order",
+      "tests/evals/test_agentic_evaluators.py::test_tool_spans_ignore_output_function_spans",
+      "tests/evals/test_agentic_evaluators.py::test_tool_spans_ignore_deferred_tool_calls",
+      "tests/evals/test_agentic_evaluators.py::test_failed_attempts_excluded_by_default",
+      "tests/evals/test_agentic_evaluators.py::test_failed_attempts_included_when_requested",
+      "tests/evals/test_agentic_evaluators.py::test_tool_correctness_multiset_requires_duplicates",
+      "tests/evals/test_agentic_evaluators.py::test_tool_correctness_both_missing_and_extra_reported",
+      "tests/evals/test_agentic_evaluators.py::test_trajectory_match_exact_fail",
+      "tests/evals/test_agentic_evaluators.py::test_trajectory_match_in_order_partial",
+      "tests/evals/test_agentic_evaluators.py::test_trajectory_match_any_order_partial_overlap",
+      "tests/evals/test_agentic_evaluators.py::test_trajectory_match_no_span_tree_returns_float_zero",
+      "tests/evals/test_agentic_evaluators.py::test_argument_correctness_subset_pass",
+      "tests/evals/test_agentic_evaluators.py::test_argument_correctness_exact_pass",
+      "tests/evals/test_agentic_evaluators.py::test_argument_correctness_exact_fail_on_extra_keys",
+      "tests/evals/test_agentic_evaluators.py::test_argument_correctness_include_content_false[_v3_tool_span]",
+      "tests/evals/test_agentic_evaluators.py::test_max_tool_calls_counts_failed_attempts_by_default",
+      "tests/evals/test_agentic_evaluators.py::test_max_model_requests_metrics_over_budget",
+      "tests/evals/test_agentic_evaluators.py::test_max_model_requests_falls_back_to_span_count",
+      "tests/evals/test_agentic_evaluators.py::test_public_exports_and_loader_order",
+      "tests/evals/test_agentic_evaluators.py::test_span_query_has_status"
+    ],
+    "pass_to_pass": [
+      "tests/evals/test_evaluator_context.py::test_evaluator_context_basic"
+    ],
+    "required_pass": [],
+    "allow_extra_failures": false,
+    "parser": {
+      "framework": "pytest",
+      "result_source": "stdout_stderr"
+    }
+  },
+  "artifacts": {
+    "stdout_log": "/logs/verifier/test-stdout.txt",
+    "stderr_log": "/logs/verifier/test-stderr.txt",
+    "parsed_results": "/logs/verifier/output.json",
+    "report": "/logs/verifier/report.json",
+    "reward": "/logs/verifier/reward.txt"
+  }
+}
