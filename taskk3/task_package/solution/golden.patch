@@ -34,10 +34,10 @@ index b0873ad..70f4d2d 100644
      # evaluator
 diff --git a/pydantic_evals/pydantic_evals/evaluators/agentic.py b/pydantic_evals/pydantic_evals/evaluators/agentic.py
 new file mode 100644
-index 0000000..65c63a9
+index 0000000..f8f7bff
 --- /dev/null
 +++ b/pydantic_evals/pydantic_evals/evaluators/agentic.py
-@@ -0,0 +1,582 @@
+@@ -0,0 +1,585 @@
 +"""Span-based evaluators for agentic workflows.
 +
 +These evaluators compare the tool-call trajectory captured in OpenTelemetry
@@ -379,7 +379,10 @@ index 0000000..65c63a9
 +            )
 +
 +        if not actual and not expected:
-+            return EvaluationReason(value=1.0, reason='both actual and expected trajectories are empty')
++            return EvaluationReason(
++                value=1.0,
++                reason='matching=0, precision=1.000, recall=1.000, F1=1.000 (both trajectories are empty)',
++            )
 +
 +        if self.order == 'any_order':
 +            overlap = sum((Counter(expected) & Counter(actual)).values())

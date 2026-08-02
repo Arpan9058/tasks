@@ -542,7 +542,11 @@ def main(argv: list[str] | None = None) -> int:
             if r["status"] in (FAILED, ERROR) and r["name"] not in req_norm
         ]
 
-    success = not missing_required and not unexpected
+    # Parsed PASS lines are insufficient when the test process itself failed:
+    # timeouts, teardown failures, plugin crashes, and interrupted runs must all
+    # fail closed even if every required node emitted PASSED first.
+    process_exit_ok = args.raw_exit_code == 0
+    success = process_exit_ok and not missing_required and not unexpected
     reward = 1.0 if success else 0.0
     return finish(
         reward,
@@ -555,6 +559,7 @@ def main(argv: list[str] | None = None) -> int:
             "passed_required_tests": passed_required,
             "missing_required_tests": missing_required,
             "unexpected_failures": unexpected,
+            "test_process_exit_ok": process_exit_ok,
         },
         0 if success else 1,
     )
