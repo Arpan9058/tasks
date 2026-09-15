@@ -25,6 +25,8 @@
 
   --gut:clamp(18px,4vw,64px);
   --maxw:1240px;
+
+  color-scheme:dark;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -120,6 +122,7 @@ section[id]{scroll-margin-top:clamp(70px,8vw,90px)}
 
 .nav{
   position:fixed;inset:0 0 auto 0;z-index:90;
+  padding-top:env(safe-area-inset-top,0px);
   transition:background .45s var(--ease),border-color .45s var(--ease),backdrop-filter .45s var(--ease);
   border-bottom:1px solid transparent;
 }
