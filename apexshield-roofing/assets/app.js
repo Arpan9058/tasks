@@ -741,6 +741,7 @@ window.addEventListener('resize', function () {
       drawStill();
     }
     sizeTest();
+    paintJobs();
   }, 160);
 }, { passive: true });
 
@@ -941,6 +942,189 @@ if (testCv && holdBtn) {
   holdBtn.addEventListener('blur', release);
   window.addEventListener('pointerup', release);
   window.addEventListener('pointercancel', release);
+}
+
+/* --------------------------------------------------- the recent work images
+
+   Six sample project shots, drawn rather than photographed: no real roofs
+   exist to photograph, so each one is painted from the same tiles the hero
+   uses, which keeps the gallery in the site's own world. */
+
+var SKIES = [
+  ['#101A26', '#2C3C4E', '#93A9BD'],   /* cold dawn */
+  ['#0C131C', '#1E2A38', '#4E6277'],   /* overcast */
+  ['#141F2E', '#31465C', '#7C93A8'],   /* clearing afternoon */
+  ['#0E1722', '#233241', '#5C7287']    /* late light */
+];
+
+function paintProject(ctx, W, H, seed) {
+  var r = rng(9001 + seed * 7717);
+  var sky = SKIES[seed % SKIES.length];
+  var cx = W * 0.5;
+  var sunLeft = seed % 2 === 0;
+
+  /* sky */
+  var g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, sky[0]); g.addColorStop(0.55, sky[1]); g.addColorStop(1, sky[2]);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  for (var c = 0; c < 3; c++) {
+    var px = r() * W, py = H * (0.05 + r() * 0.2), rad = W * (0.2 + r() * 0.3);
+    var cg = ctx.createRadialGradient(px, py, 0, px, py, rad);
+    cg.addColorStop(0, 'rgba(206,224,244,' + (0.05 + r() * 0.08).toFixed(3) + ')');
+    cg.addColorStop(1, 'rgba(206,224,244,0)');
+    ctx.fillStyle = cg; ctx.fillRect(0, 0, W, H);
+  }
+
+  var groundY = H * (0.86 + r() * 0.04);
+  drawSkyline(ctx, W, H, groundY - H * 0.1, 0.5, 0.75, 'rgba(10,15,22,.92)');
+
+  /* the roof, seen as a plane rather than edge on: this is the subject */
+  var ridgeY = H * (0.21 + r() * 0.08);
+  var eaveY = ridgeY + H * (0.36 + r() * 0.16);
+  var eaveHalf = W * (0.40 + r() * 0.07);
+  var ridgeHalf = eaveHalf * (0.42 + r() * 0.26);
+  var wallBottom = Math.min(groundY, eaveY + H * (0.12 + r() * 0.09));
+
+  /* the wall under it, drawn first so the eave overhangs it */
+  var wallHalf = eaveHalf * 0.9;
+  var wg = ctx.createLinearGradient(0, eaveY, 0, wallBottom);
+  wg.addColorStop(0, 'rgba(38,50,64,.99)'); wg.addColorStop(1, 'rgba(19,27,37,.99)');
+  ctx.fillStyle = wg;
+  ctx.fillRect(cx - wallHalf, eaveY, wallHalf * 2, wallBottom - eaveY);
+
+  var wh = wallBottom - eaveY, ww = wallHalf * 2, wx0 = cx - wallHalf;
+  var lit = (0.34 + r() * 0.3).toFixed(2);
+  ctx.fillStyle = 'rgba(255,226,186,' + lit + ')';
+  ctx.fillRect(wx0 + ww * 0.09, eaveY + wh * 0.3, ww * 0.15, wh * 0.4);
+  ctx.fillRect(wx0 + ww * 0.76, eaveY + wh * 0.3, ww * 0.15, wh * 0.4);
+  ctx.fillStyle = 'rgba(11,16,23,.98)';
+  ctx.fillRect(wx0 + ww * 0.44, eaveY + wh * 0.26, ww * 0.12, wh * 0.74);
+  ctx.strokeStyle = 'rgba(160,184,208,.2)'; ctx.lineWidth = 1;
+  ctx.strokeRect(wx0 + 0.5, eaveY + 0.5, ww - 1, wh - 1);
+
+  if (tiles) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx - ridgeHalf, ridgeY);
+    ctx.lineTo(cx + ridgeHalf, ridgeY);
+    ctx.lineTo(cx + eaveHalf, eaveY);
+    ctx.lineTo(cx - eaveHalf, eaveY);
+    ctx.closePath();
+    ctx.clip();
+
+    ctx.drawImage(tiles[1], cx - eaveHalf, ridgeY, eaveHalf * 2, eaveY - ridgeY);
+
+    /* shingle courses: the thing that actually makes a drawn roof read as a roof */
+    var courses = 8 + Math.floor(r() * 4);
+    for (var k = 1; k < courses; k++) {
+      var t2 = k / courses;
+      var cy = ridgeY + (eaveY - ridgeY) * t2;
+      var half = ridgeHalf + (eaveHalf - ridgeHalf) * t2;
+      ctx.strokeStyle = 'rgba(0,0,0,.42)'; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(cx - half, cy); ctx.lineTo(cx + half, cy); ctx.stroke();
+      ctx.strokeStyle = 'rgba(196,214,234,.09)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(cx - half, cy + 2); ctx.lineTo(cx + half, cy + 2); ctx.stroke();
+
+      /* staggered tab slots, the vertical breaks between shingles */
+      var step = W * 0.052, off = (k % 2) * step * 0.5;
+      ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1.2;
+      for (var xv = cx - half + off; xv < cx + half; xv += step) {
+        ctx.beginPath();
+        ctx.moveTo(xv, cy);
+        ctx.lineTo(xv, cy - (eaveY - ridgeY) / courses * 0.72);
+        ctx.stroke();
+      }
+    }
+
+    /* sun falling across the plane */
+    var sg = ctx.createLinearGradient(sunLeft ? cx - eaveHalf : cx + eaveHalf, ridgeY,
+                                      sunLeft ? cx + eaveHalf : cx - eaveHalf, eaveY);
+    sg.addColorStop(0, 'rgba(214,232,252,.16)');
+    sg.addColorStop(0.55, 'rgba(214,232,252,.03)');
+    sg.addColorStop(1, 'rgba(4,7,12,.3)');
+    ctx.fillStyle = sg; ctx.fillRect(cx - eaveHalf, ridgeY, eaveHalf * 2, eaveY - ridgeY);
+    ctx.restore();
+
+    /* ridge cap */
+    var capH = H * 0.026;
+    var rg = ctx.createLinearGradient(0, ridgeY - capH, 0, ridgeY + capH * 0.6);
+    rg.addColorStop(0, '#9CAAB8'); rg.addColorStop(1, '#3C4751');
+    ctx.fillStyle = rg;
+    ctx.fillRect(cx - ridgeHalf - capH * 0.4, ridgeY - capH, ridgeHalf * 2 + capH * 0.8, capH * 1.3);
+
+    /* the fascia and drip edge along the eave */
+    ctx.fillStyle = 'rgba(206,218,232,.5)';
+    ctx.fillRect(cx - eaveHalf, eaveY, eaveHalf * 2, Math.max(2, H * 0.011));
+    ctx.fillStyle = 'rgba(6,10,16,.55)';
+    ctx.fillRect(cx - eaveHalf, eaveY + Math.max(2, H * 0.011), eaveHalf * 2, Math.max(2, H * 0.009));
+  }
+
+  /* a chimney breaking the ridge on some of them */
+  if (r() > 0.4) {
+    var chx = cx + ridgeHalf * (sunLeft ? 0.5 : -0.78);
+    ctx.fillStyle = 'rgba(26,35,46,.99)';
+    ctx.fillRect(chx, ridgeY - H * 0.12, W * 0.055, H * 0.13);
+    ctx.fillStyle = 'rgba(150,170,190,.3)';
+    ctx.fillRect(chx - W * 0.006, ridgeY - H * 0.13, W * 0.067, H * 0.014);
+  }
+
+  /* ground */
+  var lawn = ctx.createLinearGradient(0, groundY, 0, H);
+  lawn.addColorStop(0, 'rgba(15,22,31,.99)'); lawn.addColorStop(1, 'rgba(6,10,15,1)');
+  ctx.fillStyle = lawn; ctx.fillRect(0, groundY, W, H - groundY + 1);
+  ctx.fillStyle = 'rgba(32,43,56,.8)';
+  ctx.beginPath();
+  ctx.moveTo(cx - ww * 0.14, groundY);
+  ctx.lineTo(cx + ww * 0.14, groundY);
+  ctx.lineTo(cx + ww * 0.3, H);
+  ctx.lineTo(cx - ww * 0.3, H);
+  ctx.closePath(); ctx.fill();
+
+  /* framing trees, never the same two */
+  var trees = 1 + Math.floor(r() * 2);
+  for (var t3 = 0; t3 < trees; t3++) {
+    var side = (t3 === 0) === sunLeft ? -1 : 1;
+    var tx = cx + side * W * (0.42 + r() * 0.08);
+    var th = H * (0.22 + r() * 0.2);
+    ctx.fillStyle = 'rgba(8,13,19,.94)';
+    ctx.beginPath();
+    ctx.ellipse(tx, groundY - th * 0.52, th * (0.3 + r() * 0.14), th * 0.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(tx - W * 0.007, groundY - th * 0.45, W * 0.014, th * 0.45);
+  }
+
+  var vg = ctx.createRadialGradient(cx, H * 0.46, Math.min(W, H) * 0.3, cx, H * 0.5, Math.max(W, H) * 0.76);
+  vg.addColorStop(0, 'rgba(6,9,14,0)');
+  vg.addColorStop(1, 'rgba(6,9,14,.5)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+
+  if (!ctx._grain) ctx._grain = ctx.createPattern(buildNoise(), 'repeat');
+  ctx.globalAlpha = 0.04;
+  ctx.fillStyle = ctx._grain; ctx.fillRect(0, 0, W, H);
+  ctx.globalAlpha = 1;
+}
+
+var jobCanvases = $$('#workgrid canvas');
+function paintJobs() {
+  if (!canFit || !jobCanvases.length) return;
+  buildTiles();
+  jobCanvases.forEach(function (cv) {
+    var f = fit(cv);
+    if (!f) return;
+    paintProject(f.ctx, f.w, f.h, parseInt(cv.dataset.job, 10) || 0);
+  });
+}
+if (jobCanvases.length) {
+  if ('IntersectionObserver' in window) {
+    var jobIO = new IntersectionObserver(function (es) {
+      if (!es.some(function (e) { return e.isIntersecting; })) return;
+      paintJobs();
+      jobIO.disconnect();
+    }, { rootMargin: '25% 0px' });
+    jobIO.observe($('#workgrid'));
+  } else {
+    paintJobs();
+  }
 }
 
 /* ---------------------------------------------------------------------- FAQ */

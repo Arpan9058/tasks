@@ -18,18 +18,18 @@
 == flick 240px x36: full-opacity consecutive steps per band = 3, 4, 4, 4, 11
 == flick 360px x24: full-opacity consecutive steps per band = 2, 2, 3, 3, 8
 == worst-frame legibility (text hidden, lightest pixel under the text box vs #EDF2F7):
-   band 1: 8.97:1
-   band 2: 5.02:1
-   band 3: 4.30:1
-   band 4: 5.25:1
-   band 5: 5.47:1
-== phone 375x812: stage none, static hero block, still painted true, hero height 810, sideways ok, console clean
-== phone 375x667: stage none, static hero block, still painted true, hero height 738, sideways ok, console clean
-== portrait tablet 820x1180: stage none, static hero block, still painted true, hero height 888, sideways ok, console clean
-== landscape phone 740x420: stage none, static hero block, still painted true, hero height 738, sideways ok, console clean
-== reduced motion 1440x900: stage none, static hero block, still painted true, hero height 888, sideways ok, console clean
+   band 1: 7.39:1
+   band 2: 5.57:1
+   band 3: 4.43:1
+   band 4: 5.19:1
+   band 5: 6.01:1
+== phone 375x812: stage none, static hero block, still painted true, hero height 834, sideways ok, console clean
+== phone 375x667: stage none, static hero block, still painted true, hero height 769, sideways ok, console clean
+== portrait tablet 820x1180: stage none, static hero block, still painted true, hero height 922, sideways ok, console clean
+== landscape phone 740x420: stage none, static hero block, still painted true, hero height 772, sideways ok, console clean
+== reduced motion 1440x900: stage none, static hero block, still painted true, hero height 915, sideways ok, console clean
 == narrow desktop 1280x800: stage block, static hero none, still painted false, hero height 7200, sideways ok, console clean
 == reduced motion flipped ON mid-session: stage none, elements still unfinished 0, storm test pinned complete true, counters 1,900+/17/4.9/0
 == reduced motion flipped back OFF: stage block, hero captions live true, no errors
-== canvas unavailable: body opacity 1, static hero block, scrub stage none, hero headline height 203, sections 10, form present true, no errors
+== canvas unavailable: body opacity 1, static hero block, scrub stage none, hero headline height 203, sections 11, form present true, no errors
 == keyboard: first tab stop "skip / Skip to content", space-held storm test completed true

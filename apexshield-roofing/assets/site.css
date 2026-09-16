@@ -115,14 +115,51 @@ button,input,select,textarea{font:inherit;color:inherit}
 main{position:relative;z-index:1;display:block}
 
 section{position:relative}
-section[id]{scroll-margin-top:clamp(70px,8vw,90px)}
+section[id]{scroll-margin-top:clamp(104px,11vw,124px)}
 .sec{padding-block:clamp(78px,10vw,148px)}
 
 /* ---------- nav ---------- */
 
-.nav{
+.topbar{
   position:fixed;inset:0 0 auto 0;z-index:90;
   padding-top:env(safe-area-inset-top,0px);
+}
+
+/* the concept banner: whose demo this is, and how to reach them */
+.concept-bar{
+  background:linear-gradient(90deg,rgba(232,54,79,.16),rgba(232,54,79,.07) 46%,rgba(10,14,20,.72));
+  border-bottom:1px solid rgba(232,54,79,.28);
+  backdrop-filter:blur(12px);
+}
+.concept-in{
+  display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;
+  padding-block:7px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.055em;
+  color:var(--text-secondary);
+}
+.concept-in p{margin:0}
+.concept-in strong{color:var(--text-primary);font-weight:500}
+.ctag{
+  flex:0 0 auto;
+  background:var(--accent);color:#fff;
+  padding:3px 9px;border-radius:2px;
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+}
+.concept-in a{
+  margin-left:auto;
+  color:var(--text-primary);text-decoration:none;
+  border-bottom:1px solid var(--accent-muted);
+  padding-bottom:1px;
+  transition:color .3s var(--ease),border-color .3s var(--ease);
+}
+.concept-in a:hover{color:var(--accent-hover);border-color:var(--accent)}
+@media (max-width:640px){
+  .concept-in{gap:8px 10px;font-size:11px}
+  .concept-in a{margin-left:0;width:100%}
+}
+
+.nav{
+  position:relative;z-index:1;
   transition:background .45s var(--ease),border-color .45s var(--ease),backdrop-filter .45s var(--ease);
   border-bottom:1px solid transparent;
 }
@@ -257,7 +294,7 @@ h3{font-size:clamp(22px,2vw,28px);font-weight:600;letter-spacing:.01em}
 .bands{position:absolute;inset:0;pointer-events:none}
 .band{
   position:absolute;
-  left:50%;top:clamp(84px,15vh,150px);
+  left:50%;top:clamp(116px,17vh,168px);
   transform:translateX(-50%);
   width:min(900px,88vw);
   text-align:center;
@@ -418,7 +455,7 @@ h3{font-size:clamp(22px,2vw,28px);font-weight:600;letter-spacing:.01em}
   position:relative;
   display:flex;flex-direction:column;justify-content:flex-start;
   min-height:clamp(560px,92vh,860px);
-  padding-block:clamp(104px,16vh,144px) clamp(190px,34vh,300px);
+  padding-block:clamp(138px,19vh,178px) clamp(190px,34vh,300px);
   text-shadow:var(--tshadow);
 }
 .static-in h1{font-size:clamp(42px,10.4vw,72px);line-height:.94;max-width:16ch}
@@ -510,6 +547,60 @@ h3{font-size:clamp(22px,2vw,28px);font-weight:600;letter-spacing:.01em}
   .stack-grid{grid-template-columns:1fr}
   .stack-copy{position:static}
 }
+
+.sample{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;
+  padding:7px 13px;
+  border:1px solid var(--accent-muted);
+  border-radius:2px;
+  background:rgba(232,54,79,.06);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-secondary);
+}
+.sample::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* ---------- recent work ---------- */
+
+.work-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(16px,2vw,26px);
+  margin-top:clamp(40px,5vw,64px);
+}
+.job{
+  margin:0;
+  border:1px solid var(--line);
+  background:var(--panel);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:border-color .45s var(--ease),transform .55s var(--ease);
+}
+.job:hover{border-color:var(--line-strong);transform:translateY(-3px)}
+.job .shot{
+  position:relative;
+  aspect-ratio:4/3;
+  max-width:100%;
+  background:linear-gradient(180deg,#101B28 0%,#1B2837 58%,#2A3948 100%);
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+.job .shot canvas{position:absolute;inset:0;width:100%;height:100%}
+.job figcaption{padding:clamp(18px,2vw,24px);display:flex;flex-direction:column;gap:8px}
+.job h3{
+  font-family:var(--body);font-weight:600;font-size:17px;
+  text-transform:none;letter-spacing:0;line-height:1.3;
+}
+.job .spec{
+  margin:0;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--steel);line-height:1.6;
+}
+.job .spec i{font-style:normal;color:var(--accent);padding-inline:2px}
+.job .note{margin:0;color:var(--text-secondary);font-size:14.5px;line-height:1.55;max-width:38ch}
+@media (max-width:940px){.work-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:580px){.work-grid{grid-template-columns:1fr}}
 
 /* ---------- services ---------- */
 
@@ -868,7 +959,7 @@ footer{
     scroll-behavior:auto !important;
   }
   body{opacity:1;animation:none}
-  .rise,.quote,.layer,.step,.guard,.test-out{opacity:1}
+  .rise,.quote,.layer,.step,.guard,.test-out,.job{opacity:1}
   .rise,.step,.guard,.test-out{transform:translateY(0)}
   .layer{transform:translateX(0)}
   .quote,.quotes.in .quote:nth-child(2){transform:translateY(0)}
